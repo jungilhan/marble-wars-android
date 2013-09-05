@@ -30,9 +30,28 @@ public class SplashActivty extends SimpleBaseGameActivity {
 	@Override
 	protected Scene onCreateScene() {
 		Scene scene = new Scene();
-		Sprite bgSprite = new Sprite(0, 0, ResourceManager.getInstance().getGameBackgroundTextureRegion(), getVertexBufferObjectManager());			
-		bgSprite.setOffsetCenter(0f, 0f);
+		
+		float centerX = Constants.CAMERA_WIDTH / 2;
+		float centerY = Constants.CAMERA_HEIGHT / 2;
+		
+		Sprite bgSprite = new Sprite(centerX, centerY, ResourceManager.getInstance().getSplashBackgroundTextureRegion(), getVertexBufferObjectManager());			
 		scene.setBackground(new SpriteBackground(bgSprite));
+		
+		Sprite titleSprite = new Sprite(centerX, centerY, ResourceManager.getInstance().getSplashTitleTextureRegion(), getVertexBufferObjectManager());
+		scene.attachChild(titleSprite);
+
+		Sprite logoSprite = new Sprite(centerX, 50, ResourceManager.getInstance().getSplashLogoTextureRegion(), getVertexBufferObjectManager());
+		scene.attachChild(logoSprite);		
+		
+		Sprite marbleSmallSprite1 = new Sprite(60, Constants.CAMERA_HEIGHT - 60, ResourceManager.getInstance().getSplashMarbleSmallTextureRegion(), getVertexBufferObjectManager());
+		scene.attachChild(marbleSmallSprite1);
+		
+		Sprite marbleSmallSprite2 = new Sprite(Constants.CAMERA_WIDTH - 50, 200, ResourceManager.getInstance().getSplashMarbleSmallTextureRegion(), getVertexBufferObjectManager());
+		scene.attachChild(marbleSmallSprite2);
+		
+		Sprite marbleLargeSprite = new Sprite(Constants.CAMERA_WIDTH - 70, 70, ResourceManager.getInstance().getSplashMarbleLargeTextureRegion(), getVertexBufferObjectManager());
+		scene.attachChild(marbleLargeSprite);
+		
 		return scene;
 	}
 }
