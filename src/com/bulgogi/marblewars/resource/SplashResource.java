@@ -1,4 +1,4 @@
-package com.bulgogi.marblewars.game;
+package com.bulgogi.marblewars.resource;
 
 import org.andengine.engine.Engine;
 import org.andengine.opengl.texture.TextureOptions;
@@ -14,9 +14,9 @@ import org.andengine.util.debug.Debug;
 
 import android.content.Context;
 
-import com.bulgogi.marblewars.game.base.BaseLoader;
+import com.bulgogi.marblewars.base.BaseResource;
 
-public class SplashLoader implements BaseLoader {
+public class SplashResource implements BaseResource {
 	private ITextureRegion backgroundTextureRegion;
 	private ITextureRegion titleTextureRegion;
 	private ITextureRegion marbleLargeTextureRegion;
@@ -24,17 +24,17 @@ public class SplashLoader implements BaseLoader {
 	private ITextureRegion logoTextureRegion;
 	
 	@Override
-	public void load(Engine engine, Context context) {
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+	public void load(Context context, Engine engine) {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/splash/");
 		
 		BuildableBitmapTextureAtlas bitmapTextureAtlas = new BuildableBitmapTextureAtlas(engine.getTextureManager(), 
 				1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR);
 
-		backgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bitmapTextureAtlas, context, "splash_background.png");
-		titleTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bitmapTextureAtlas, context, "splash_title.png");
-		marbleLargeTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bitmapTextureAtlas, context, "splash_marble_l.png");
-		marbleSmallTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bitmapTextureAtlas, context, "splash_marble_s.png");
-		logoTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bitmapTextureAtlas, context, "splash_logo.png");
+		backgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bitmapTextureAtlas, context, "background.png");
+		titleTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bitmapTextureAtlas, context, "title.png");
+		marbleLargeTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bitmapTextureAtlas, context, "marble_l.png");
+		marbleSmallTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bitmapTextureAtlas, context, "marble_s.png");
+		logoTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bitmapTextureAtlas, context, "logo.png");
 		
 		try {
 			bitmapTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
@@ -47,6 +47,11 @@ public class SplashLoader implements BaseLoader {
 	@Override
 	public void unload() {
 		BuildableBitmapTextureAtlas bitmapTextureAtlas = (BuildableBitmapTextureAtlas) backgroundTextureRegion.getTexture();
+		backgroundTextureRegion = null;
+		titleTextureRegion = null;
+		marbleLargeTextureRegion = null;
+		marbleSmallTextureRegion = null;
+		logoTextureRegion = null;
 		bitmapTextureAtlas.unload();
 		
 		System.gc();		
