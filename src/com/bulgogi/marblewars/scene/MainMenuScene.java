@@ -1,5 +1,7 @@
 package com.bulgogi.marblewars.scene;
 
+import java.util.ArrayList;
+
 import org.andengine.engine.Engine;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
@@ -10,14 +12,21 @@ import android.content.Context;
 import com.bulgogi.marblewars.base.BaseResource;
 import com.bulgogi.marblewars.base.BaseScene;
 import com.bulgogi.marblewars.config.Constants;
+import com.bulgogi.marblewars.config.Constants.Chapter;
 import com.bulgogi.marblewars.config.Constants.SceneType;
 import com.bulgogi.marblewars.event.Event;
 import com.bulgogi.marblewars.resource.MainMenuResource;
+import com.bulgogi.marblewars.scene.model.MainMenuParams;
 
 import de.greenrobot.event.EventBus;
 
 public class MainMenuScene extends BaseScene {
+	private final int UNLOCK = 0;
+	private final int LOCK = 1;
+	
 	private MainMenuResource resource;
+	private ArrayList<Sprite> normalSprites = new ArrayList<Sprite>();
+	private ArrayList<Sprite> hardSprites = new ArrayList<Sprite>();
 	
 	public MainMenuScene(Context context, Engine engine, BaseResource resource) {
 		super(engine);
@@ -44,7 +53,7 @@ public class MainMenuScene extends BaseScene {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if (pSceneTouchEvent.isActionUp()) {
-					EventBus.getDefault().post(new Event.StartScene(SceneType.MAIN_MENU, SceneType.SUB_MENU));
+					EventBus.getDefault().post(new Event.StartScene(SceneType.MAIN_MENU, SceneType.SUB_MENU, null));
 					return true;
 				}
 				
@@ -65,7 +74,6 @@ public class MainMenuScene extends BaseScene {
 				return false;
 			}
 		};
-		normalUnlock.setVisible(false);
 		scene.registerTouchArea(normalUnlock);
 		scene.attachChild(normalUnlock);
 		
@@ -80,7 +88,6 @@ public class MainMenuScene extends BaseScene {
 				return false;
 			}
 		};
-		hardUnlock.setVisible(false);
 		scene.registerTouchArea(hardUnlock);
 		scene.attachChild(hardUnlock);
 		
@@ -113,5 +120,42 @@ public class MainMenuScene extends BaseScene {
 		scene.attachChild(hardLock);
 		
 		scene.setTouchAreaBindingOnActionDownEnabled(true);
+		
+		normalSprites.add(normalUnlock);
+		normalSprites.add(normalLock);
+		
+		hardSprites.add(hardUnlock);
+		hardSprites.add(hardLock);
+	}
+	
+	@Override
+	public void setParams(final Object params) {
+		MainMenuParams mainMenuParams = (MainMenuParams) params;
+		setVisibilityChild(mainMenuParams.chapter);
+	}
+	
+	private void setVisibilityChild(final Chapter chapter) {
+		for (Sprite normalSprite : normalSprites) {
+			normalSprite.setVisible(false);
+		}
+		
+		for (Sprite hardSprite : hardSprites) {
+			hardSprite.setVisible(false);
+		}
+		
+		switch (chapter) {
+		case EASY:
+			normalSprites.get(LOCK).setVisible(true);
+			hardSprites.get(LOCK).setVisible(true);
+			break;
+		case NORMAL:
+			normalSprites.get(UNLOCK).setVisible(true);
+			hardSprites.get(LOCK).setVisible(true);
+			break;
+		case HARD:
+			normalSprites.get(UNLOCK).setVisible(true);
+			hardSprites.get(UNLOCK).setVisible(true);
+			break;
+		}
 	}
 }

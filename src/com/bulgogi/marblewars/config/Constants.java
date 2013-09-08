@@ -9,9 +9,10 @@ public class Constants {
 	public static float CENTER_Y = CAMERA_HEIGHT * 0.5f;
 	
 	public static int LEVEL_FONT_SIZE = 32;
+	public static int NAVATION_BACK_FONT_SIZE = 24;
 
 	public enum SceneType {
-		SPLASH, MAIN_MENU, SUB_MENU
+		SPLASH, MAIN_MENU, SUB_MENU, GAME
 	}
 	
 	public enum Chapter {

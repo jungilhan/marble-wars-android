@@ -11,6 +11,11 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 
 import com.bulgogi.marblewars.config.Constants;
 import com.bulgogi.marblewars.config.Constants.Chapter;
+import com.bulgogi.marblewars.config.Constants.SceneType;
+import com.bulgogi.marblewars.event.Event;
+import com.bulgogi.marblewars.scene.model.GameParams;
+
+import de.greenrobot.event.EventBus;
 
 public class LevelSelector extends Entity {
 	private final int TOP_MARGIN = 40;
@@ -120,7 +125,8 @@ public class LevelSelector extends Entity {
 		public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 			if (LevelSelector.this.isVisible() && pSceneTouchEvent.isActionUp()) {
 				if (!locked) {
-					
+					GameParams params = new GameParams(LevelSelector.this.chapter, LevelSelector.this.maxLevel, level);
+					EventBus.getDefault().post(new Event.StartScene(SceneType.SUB_MENU, SceneType.GAME, params));
 				}
 			}
 			

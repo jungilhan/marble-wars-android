@@ -24,4 +24,5 @@ public abstract class BaseScene {
 	}
 	
 	public abstract void populateScene();
+	public abstract void setParams(final Object params);
 }

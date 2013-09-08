@@ -56,6 +56,8 @@ public class SubMenuResource implements BaseResource {
 		BuildableBitmapTextureAtlas bitmapTextureAtlas = (BuildableBitmapTextureAtlas) backgroundTextureRegion.getTexture();
 		backgroundTextureRegion = null;
 		navigationBackTextureRegion = null;
+		tileTextureRegion = null;
+		lockTextureRegion = null;
 		bitmapTextureAtlas.unload();
 		
 		System.gc();		

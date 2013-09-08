@@ -14,6 +14,7 @@ import com.bulgogi.marblewars.config.Constants.Chapter;
 import com.bulgogi.marblewars.config.Constants.SceneType;
 import com.bulgogi.marblewars.event.Event;
 import com.bulgogi.marblewars.resource.SubMenuResource;
+import com.bulgogi.marblewars.scene.model.MainMenuParams;
 import com.bulgogi.marblewars.scene.widget.LevelSelector;
 
 import de.greenrobot.event.EventBus;
@@ -46,7 +47,9 @@ private SubMenuResource resource;
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if (pSceneTouchEvent.isActionUp()) {
-					EventBus.getDefault().post(new Event.StartScene(SceneType.SUB_MENU, SceneType.MAIN_MENU));
+					// [TODO] 
+					MainMenuParams params = new MainMenuParams(Chapter.EASY);
+					EventBus.getDefault().post(new Event.StartScene(SceneType.SUB_MENU, SceneType.MAIN_MENU, params));
 					return true;
 				}
 				return false;
@@ -55,10 +58,16 @@ private SubMenuResource resource;
 		scene.registerTouchArea(navigationBack);
 		scene.attachChild(navigationBack);
 		
+		// [TODO] 
 		LevelSelector levelSelector = new LevelSelector(engine, scene, Chapter.EASY, 22, 25);
 		levelSelector.createTiles(resource.getTileTextureRegion(), resource.getLockTextureRegion(), resource.getFont());
 		scene.attachChild(levelSelector);
 		
 		scene.setTouchAreaBindingOnActionDownEnabled(true);
+	}
+
+	@Override
+	public void setParams(Object params) {
+		
 	}
 }

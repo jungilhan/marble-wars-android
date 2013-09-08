@@ -15,14 +15,18 @@ import android.content.res.Configuration;
 
 import com.bulgogi.marblewars.base.BaseResource;
 import com.bulgogi.marblewars.config.Constants;
+import com.bulgogi.marblewars.config.Constants.Chapter;
 import com.bulgogi.marblewars.config.Constants.SceneType;
 import com.bulgogi.marblewars.event.Event;
 import com.bulgogi.marblewars.factory.ResourceFactory;
 import com.bulgogi.marblewars.factory.ResourceFactory.Type;
 import com.bulgogi.marblewars.listener.SceneListener;
+import com.bulgogi.marblewars.scene.GameScene;
 import com.bulgogi.marblewars.scene.MainMenuScene;
 import com.bulgogi.marblewars.scene.SplashScene;
 import com.bulgogi.marblewars.scene.SubMenuScene;
+import com.bulgogi.marblewars.scene.model.GameParams;
+import com.bulgogi.marblewars.scene.model.MainMenuParams;
 
 import de.greenrobot.event.EventBus;
 
@@ -30,6 +34,7 @@ public class GameActivity extends SimpleBaseGameActivity {
 	private SplashScene splashScene;
 	private MainMenuScene mainMenuScene;
 	private SubMenuScene subMenuScene;
+	private GameScene gameScene;
 	
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -51,13 +56,18 @@ public class GameActivity extends SimpleBaseGameActivity {
 		final BaseResource subMenuResource = ResourceFactory.getInstance().create(Type.SUB_MENU);
 		subMenuScene = new SubMenuScene(this, getEngine(), subMenuResource);
 		
+		final BaseResource gameResource = ResourceFactory.getInstance().create(Type.GAME);
+		gameScene = new GameScene(this, getEngine(), gameResource);
+		
 		splashScene.setListener(new SceneListener() {
 			@Override
 			public void onSceneEnd() {
 				mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
 					@Override
 					public void onTimePassed(TimerHandler pTimerHandler) {
-						EventBus.getDefault().post(new Event.StartScene(SceneType.SPLASH, SceneType.MAIN_MENU));
+						// [TODO] 
+						MainMenuParams params = new MainMenuParams(Chapter.EASY);
+						EventBus.getDefault().post(new Event.StartScene(SceneType.SPLASH, SceneType.MAIN_MENU, params));
 					}
 				}));
 			}
@@ -90,9 +100,22 @@ public class GameActivity extends SimpleBaseGameActivity {
 			break;
 		case MAIN_MENU:
 			scene = mainMenuScene.getScene();
+			if (event.params != null) {
+				mainMenuScene.setParams((MainMenuParams) event.params);
+			} else {
+				throw new IllegalArgumentException();		
+			}
 			break;
 		case SUB_MENU:
 			scene = subMenuScene.getScene();
+			break;
+		case GAME:
+			scene = gameScene.getScene();
+			if (event.params != null) {
+				gameScene.setParams((GameParams) event.params);
+			} else {
+				throw new IllegalArgumentException();		
+			}
 			break;
 		}
 		

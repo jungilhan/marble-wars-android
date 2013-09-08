@@ -74,4 +74,9 @@ public class SplashScene extends BaseScene {
 		
 		scene.attachChild(rightFrontMarble);
 	}
+
+	@Override
+	public void setParams(Object params) {
+		
+	}
 }
