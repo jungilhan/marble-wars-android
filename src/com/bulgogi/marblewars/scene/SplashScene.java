@@ -29,16 +29,16 @@ public class SplashScene extends BaseScene {
 
 	@Override
 	public void populateScene() {
-		Sprite background = new Sprite(Constants.CENTER_X, Constants.CENTER_Y, resource.getBackgroundTextureRegion(), engine.getVertexBufferObjectManager());			
+		final Sprite background = new Sprite(Constants.CENTER_X, Constants.CENTER_Y, resource.getBackgroundTextureRegion(), engine.getVertexBufferObjectManager());			
 		scene.setBackground(new SpriteBackground(background));
 		
-		Sprite title = new Sprite(Constants.CENTER_X, Constants.CENTER_Y, resource.getTitleTextureRegion(), engine.getVertexBufferObjectManager());
+		final Sprite title = new Sprite(Constants.CENTER_X, Constants.CENTER_Y, resource.getTitleTextureRegion(), engine.getVertexBufferObjectManager());
 		scene.attachChild(title);
 
-		Sprite logo = new Sprite(Constants.CENTER_X, 50, resource.getLogoTextureRegion(), engine.getVertexBufferObjectManager());
+		final Sprite logo = new Sprite(Constants.CENTER_X, 50, resource.getLogoTextureRegion(), engine.getVertexBufferObjectManager());
 		scene.attachChild(logo);		
 		
-		Sprite leftMarble = new Sprite(-122.5f, Constants.CAMERA_HEIGHT - 60, resource.getMarbleSmallTextureRegion(), engine.getVertexBufferObjectManager());
+		final Sprite leftMarble = new Sprite(-122.5f, Constants.CAMERA_HEIGHT - 60, resource.getMarbleSmallTextureRegion(), engine.getVertexBufferObjectManager());
 		leftMarble.registerEntityModifier(ModifierHelper.sequence(
 				ModifierHelper.delay(leftMarble, 1.5f),
 				ModifierHelper.moveX(leftMarble, 0.2f, leftMarble.getWidth() * -0.5f, 60)));
@@ -46,7 +46,7 @@ public class SplashScene extends BaseScene {
 		
 		float fromX = Constants.CAMERA_WIDTH + 122.5f;
 		float toX = Constants.CAMERA_WIDTH - 50;
-		Sprite rightBackMarble = new Sprite(fromX, 200, resource.getMarbleSmallTextureRegion(), engine.getVertexBufferObjectManager());
+		final Sprite rightBackMarble = new Sprite(fromX, 200, resource.getMarbleSmallTextureRegion(), engine.getVertexBufferObjectManager());
 		rightBackMarble.registerEntityModifier(ModifierHelper.sequence(
 				ModifierHelper.delay(rightBackMarble, 2f),
 				ModifierHelper.moveX(rightBackMarble, 0.2f, fromX, toX)));
@@ -54,7 +54,7 @@ public class SplashScene extends BaseScene {
 		
 		fromX = Constants.CAMERA_WIDTH + 138f;
 		toX = Constants.CAMERA_WIDTH - 70;
-		Sprite rightFrontMarble = new Sprite(fromX, 70, resource.getMarbleLargeTextureRegion(), engine.getVertexBufferObjectManager());
+		final Sprite rightFrontMarble = new Sprite(fromX, 70, resource.getMarbleLargeTextureRegion(), engine.getVertexBufferObjectManager());
 		rightFrontMarble.registerEntityModifier(ModifierHelper.sequence(
 				new IEntityModifierListener() {
 					@Override

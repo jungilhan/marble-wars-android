@@ -3,12 +3,13 @@ package com.bulgogi.marblewars.factory;
 import com.bulgogi.marblewars.base.BaseResource;
 import com.bulgogi.marblewars.resource.MainMenuResource;
 import com.bulgogi.marblewars.resource.SplashResource;
+import com.bulgogi.marblewars.resource.SubMenuResource;
 
 public class ResourceFactory {
 	private volatile static ResourceFactory instance;
 	
 	public enum Type {
-		SPLASH, MAIN_MENU
+		SPLASH, MAIN_MENU, SUB_MENU
 	}
 	
 	private ResourceFactory() {
@@ -31,6 +32,8 @@ public class ResourceFactory {
 			return new SplashResource();
 		case MAIN_MENU:
 			return new MainMenuResource();
+		case SUB_MENU:
+			return new SubMenuResource();
 		}
 		
 		throw new IllegalArgumentException();

@@ -10,7 +10,11 @@ import android.content.Context;
 import com.bulgogi.marblewars.base.BaseResource;
 import com.bulgogi.marblewars.base.BaseScene;
 import com.bulgogi.marblewars.config.Constants;
+import com.bulgogi.marblewars.config.Constants.SceneType;
+import com.bulgogi.marblewars.event.Event;
 import com.bulgogi.marblewars.resource.MainMenuResource;
+
+import de.greenrobot.event.EventBus;
 
 public class MainMenuScene extends BaseScene {
 	private MainMenuResource resource;
@@ -39,7 +43,12 @@ public class MainMenuScene extends BaseScene {
 		final Sprite easyUnlock = new Sprite(x, y, resource.getEasyUnlockTextureRegion(), engine.getVertexBufferObjectManager()) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				return true;
+				if (pSceneTouchEvent.isActionUp()) {
+					EventBus.getDefault().post(new Event.StartScene(SceneType.MAIN_MENU, SceneType.SUB_MENU));
+					return true;
+				}
+				
+				return false;
 			}
 		};
 		scene.registerTouchArea(easyUnlock);
@@ -49,7 +58,7 @@ public class MainMenuScene extends BaseScene {
 		final Sprite normalUnlock = new Sprite(x, y, resource.getNormalUnlockTextureRegion(), engine.getVertexBufferObjectManager()) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				if (this.isVisible()) {
+				if (pSceneTouchEvent.isActionUp() && this.isVisible()) {
 					return true;
 				}
 				
@@ -64,7 +73,7 @@ public class MainMenuScene extends BaseScene {
 		final Sprite hardUnlock = new Sprite(x, y, resource.getHardUnlockTextureRegion(), engine.getVertexBufferObjectManager()) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				if (this.isVisible()) {
+				if (pSceneTouchEvent.isActionUp() && this.isVisible()) {
 					return true;
 				}
 				
@@ -79,7 +88,7 @@ public class MainMenuScene extends BaseScene {
 		final Sprite normalLock = new Sprite(x, y, resource.getNormalLockTextureRegion(), engine.getVertexBufferObjectManager()) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				if (this.isVisible()) {
+				if (pSceneTouchEvent.isActionUp() && this.isVisible()) {
 					return true;
 				}
 				
@@ -93,7 +102,7 @@ public class MainMenuScene extends BaseScene {
 		final Sprite hardLock = new Sprite(x, y, resource.getHardLockTextureRegion(), engine.getVertexBufferObjectManager()) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				if (this.isVisible()) {
+				if (pSceneTouchEvent.isActionUp() && this.isVisible()) {
 					return true;
 				}
 				
