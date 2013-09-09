@@ -13,7 +13,7 @@ import com.bulgogi.marblewars.config.Constants;
 import com.bulgogi.marblewars.config.Constants.Chapter;
 import com.bulgogi.marblewars.config.Constants.SceneType;
 import com.bulgogi.marblewars.event.Event;
-import com.bulgogi.marblewars.scene.model.GameParams;
+import com.bulgogi.marblewars.scene.model.GameSceneParams;
 
 import de.greenrobot.event.EventBus;
 
@@ -28,18 +28,18 @@ public class LevelSelector extends Entity {
 	private final Engine engine;
 	private final Scene scene;
 	private final Chapter chapter;
-	private final int unlockedLevel;
 	private final int maxLevel;
+	private final int unlockedLevel;
 	private final float positionTile[] = new float[2];
 
-	public LevelSelector(final Engine engine, final Scene scene, final Chapter chapter, final int unlockedLevel, final int maxLevel) {
+	public LevelSelector(final Engine engine, final Scene scene, final Chapter chapter, final int maxLevel, final int unlockedLevel) {
 		super();
 		
 		this.engine = engine;
 		this.scene = scene;
 		this.chapter = chapter;
-		this.unlockedLevel = unlockedLevel;
 		this.maxLevel = maxLevel;
+		this.unlockedLevel = unlockedLevel;
 
 		final float halfWidth = ((TILE_WIDTH * COLUMNS) + TILE_PADDING * (COLUMNS - 1)) * 0.5f;
 		positionTile[0] = Constants.CAMERA_WIDTH * 0.5f - halfWidth;
@@ -125,7 +125,7 @@ public class LevelSelector extends Entity {
 		public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 			if (LevelSelector.this.isVisible() && pSceneTouchEvent.isActionUp()) {
 				if (!locked) {
-					GameParams params = new GameParams(LevelSelector.this.chapter, LevelSelector.this.maxLevel, level);
+					GameSceneParams params = new GameSceneParams(LevelSelector.this.chapter, LevelSelector.this.maxLevel, LevelSelector.this.unlockedLevel, level);
 					EventBus.getDefault().post(new Event.StartScene(SceneType.SUB_MENU, SceneType.GAME, params));
 				}
 			}

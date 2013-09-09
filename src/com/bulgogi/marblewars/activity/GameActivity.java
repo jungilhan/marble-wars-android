@@ -3,8 +3,6 @@ package com.bulgogi.marblewars.activity;
 import java.io.IOException;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -14,19 +12,15 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 import android.content.res.Configuration;
 
 import com.bulgogi.marblewars.base.BaseResource;
+import com.bulgogi.marblewars.base.BaseScene;
 import com.bulgogi.marblewars.config.Constants;
-import com.bulgogi.marblewars.config.Constants.Chapter;
-import com.bulgogi.marblewars.config.Constants.SceneType;
 import com.bulgogi.marblewars.event.Event;
 import com.bulgogi.marblewars.factory.ResourceFactory;
 import com.bulgogi.marblewars.factory.ResourceFactory.Type;
-import com.bulgogi.marblewars.listener.SceneListener;
 import com.bulgogi.marblewars.scene.GameScene;
 import com.bulgogi.marblewars.scene.MainMenuScene;
 import com.bulgogi.marblewars.scene.SplashScene;
 import com.bulgogi.marblewars.scene.SubMenuScene;
-import com.bulgogi.marblewars.scene.model.GameParams;
-import com.bulgogi.marblewars.scene.model.MainMenuParams;
 
 import de.greenrobot.event.EventBus;
 
@@ -58,20 +52,6 @@ public class GameActivity extends SimpleBaseGameActivity {
 		
 		final BaseResource gameResource = ResourceFactory.getInstance().create(Type.GAME);
 		gameScene = new GameScene(this, getEngine(), gameResource);
-		
-		splashScene.setListener(new SceneListener() {
-			@Override
-			public void onSceneEnd() {
-				mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
-					@Override
-					public void onTimePassed(TimerHandler pTimerHandler) {
-						// [TODO] 
-						MainMenuParams params = new MainMenuParams(Chapter.EASY);
-						EventBus.getDefault().post(new Event.StartScene(SceneType.SPLASH, SceneType.MAIN_MENU, params));
-					}
-				}));
-			}
-		});
 	}
 
 	@Override
@@ -92,37 +72,28 @@ public class GameActivity extends SimpleBaseGameActivity {
 	}
 	
 	public void onEvent(Event.StartScene event) {
-		Scene scene = null;
+		BaseScene sceneWrapper = null;
 		
 		switch (event.toScene) {
 		case SPLASH:
-			scene = splashScene.getScene();
+			sceneWrapper = splashScene;
 			break;
 		case MAIN_MENU:
-			scene = mainMenuScene.getScene();
-			if (event.params != null) {
-				mainMenuScene.setParams((MainMenuParams) event.params);
-			} else {
-				throw new IllegalArgumentException();		
-			}
+			sceneWrapper = mainMenuScene;
 			break;
 		case SUB_MENU:
-			scene = subMenuScene.getScene();
+			sceneWrapper = subMenuScene;
 			break;
 		case GAME:
-			scene = gameScene.getScene();
-			if (event.params != null) {
-				gameScene.setParams((GameParams) event.params);
-			} else {
-				throw new IllegalArgumentException();		
-			}
+			sceneWrapper = gameScene;
 			break;
 		}
 		
-		if (scene == null) {
+		if (sceneWrapper == null) {
 			throw new IllegalArgumentException();
 		}
 		
-		getEngine().setScene(scene);
+		sceneWrapper.onSceneChanged(event.params);
+		getEngine().setScene(sceneWrapper.getScene());
 	}
 }

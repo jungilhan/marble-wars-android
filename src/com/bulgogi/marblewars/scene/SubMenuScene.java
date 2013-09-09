@@ -14,13 +14,14 @@ import com.bulgogi.marblewars.config.Constants.Chapter;
 import com.bulgogi.marblewars.config.Constants.SceneType;
 import com.bulgogi.marblewars.event.Event;
 import com.bulgogi.marblewars.resource.SubMenuResource;
-import com.bulgogi.marblewars.scene.model.MainMenuParams;
+import com.bulgogi.marblewars.scene.model.SceneParams;
 import com.bulgogi.marblewars.scene.widget.LevelSelector;
 
 import de.greenrobot.event.EventBus;
 
 public class SubMenuScene extends BaseScene {
-private SubMenuResource resource;
+	private SubMenuResource resource;
+	private LevelSelector levelSelector;
 	
 	public SubMenuScene(Context context, Engine engine, BaseResource resource) {
 		super(engine);
@@ -47,9 +48,8 @@ private SubMenuResource resource;
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if (pSceneTouchEvent.isActionUp()) {
-					// [TODO] 
-					MainMenuParams params = new MainMenuParams(Chapter.EASY);
-					EventBus.getDefault().post(new Event.StartScene(SceneType.SUB_MENU, SceneType.MAIN_MENU, params));
+					SceneParams sceneParams = new SceneParams(params.chapter, params.maxLevel, params.unlockedLevel);
+					EventBus.getDefault().post(new Event.StartScene(SceneType.SUB_MENU, SceneType.MAIN_MENU, sceneParams));
 					return true;
 				}
 				return false;
@@ -58,16 +58,22 @@ private SubMenuResource resource;
 		scene.registerTouchArea(navigationBack);
 		scene.attachChild(navigationBack);
 		
-		// [TODO] 
-		LevelSelector levelSelector = new LevelSelector(engine, scene, Chapter.EASY, 22, 25);
-		levelSelector.createTiles(resource.getTileTextureRegion(), resource.getLockTextureRegion(), resource.getFont());
-		scene.attachChild(levelSelector);
-		
 		scene.setTouchAreaBindingOnActionDownEnabled(true);
 	}
 
 	@Override
-	public void setParams(Object params) {
+	public void onSceneChanged(final SceneParams params) {
+		this.params = params;
 		
+		if (levelSelector != null) {
+			levelSelector.detachChildren();
+			levelSelector.dispose();
+			levelSelector.detachSelf();
+			levelSelector = null;
+		}
+		
+		levelSelector = new LevelSelector(engine, scene, this.params.chapter, this.params.maxLevel, this.params.unlockedLevel);
+		levelSelector.createTiles(resource.getTileTextureRegion(), resource.getLockTextureRegion(), resource.getFont());
+		scene.attachChild(levelSelector);
 	}
 }

@@ -12,8 +12,14 @@ import android.content.Context;
 import com.bulgogi.marblewars.base.BaseResource;
 import com.bulgogi.marblewars.base.BaseScene;
 import com.bulgogi.marblewars.config.Constants;
+import com.bulgogi.marblewars.config.Constants.Chapter;
+import com.bulgogi.marblewars.config.Constants.SceneType;
+import com.bulgogi.marblewars.event.Event;
 import com.bulgogi.marblewars.resource.SplashResource;
+import com.bulgogi.marblewars.scene.model.SceneParams;
 import com.bulgogi.marblewars.util.ModifierHelper;
+
+import de.greenrobot.event.EventBus;
 
 public class SplashScene extends BaseScene {
 	private SplashResource resource;
@@ -63,20 +69,23 @@ public class SplashScene extends BaseScene {
 
 					@Override
 					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-						if (listener != null) {
-							listener.onSceneEnd();
-							scene.detachSelf();
-						}
+						SceneParams params = new SceneParams(Chapter.NORMAL, 30, 20);
+						EventBus.getDefault().post(new Event.StartScene(SceneType.SPLASH, SceneType.MAIN_MENU, params));
+						
+						scene.detachChildren();
+						scene.dispose();
+						scene.detachSelf();
 					}
 				},
 				ModifierHelper.delay(rightFrontMarble, 2f),
-				ModifierHelper.moveX(rightFrontMarble, 0.2f, fromX, toX)));
+				ModifierHelper.moveX(rightFrontMarble, 0.2f, fromX, toX),
+				ModifierHelper.delay(rightFrontMarble, 1f)));
 		
 		scene.attachChild(rightFrontMarble);
 	}
 
 	@Override
-	public void setParams(Object params) {
+	public void onSceneChanged(SceneParams params) {
 		
 	}
 }

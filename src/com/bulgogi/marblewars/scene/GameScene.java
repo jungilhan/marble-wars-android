@@ -18,7 +18,8 @@ import com.bulgogi.marblewars.config.Constants.Chapter;
 import com.bulgogi.marblewars.config.Constants.SceneType;
 import com.bulgogi.marblewars.event.Event;
 import com.bulgogi.marblewars.resource.GameResource;
-import com.bulgogi.marblewars.scene.model.GameParams;
+import com.bulgogi.marblewars.scene.model.GameSceneParams;
+import com.bulgogi.marblewars.scene.model.SceneParams;
 import com.bulgogi.marblewars.scene.widget.NavigationBackSprite;
 
 import de.greenrobot.event.EventBus;
@@ -47,13 +48,14 @@ public class GameScene extends BaseScene {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if (this.isVisible() && pSceneTouchEvent.isActionUp()) {
-					EventBus.getDefault().post(new Event.StartScene(SceneType.GAME, SceneType.SUB_MENU, null));
+					// TODO unlocked level에 대한 처리 필요
+					SceneParams sceneParams = new SceneParams(params.chapter, params.maxLevel, 12);
+					EventBus.getDefault().post(new Event.StartScene(SceneType.GAME, SceneType.SUB_MENU, sceneParams));
 					return true;
 				}
 				return false;
 			}
 		};
-		navigationBackEasy.setText("12/25");
 		navigationBackEasy.setVisible(true);
 		scene.registerTouchArea(navigationBackEasy);
 		scene.attachChild(navigationBackEasy);
@@ -62,7 +64,8 @@ public class GameScene extends BaseScene {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if (this.isVisible() && pSceneTouchEvent.isActionUp()) {
-					EventBus.getDefault().post(new Event.StartScene(SceneType.GAME, SceneType.SUB_MENU, null));
+					SceneParams sceneParams = new SceneParams(params.chapter, params.maxLevel, params.unlockedLevel);
+					EventBus.getDefault().post(new Event.StartScene(SceneType.GAME, SceneType.SUB_MENU, sceneParams));
 					return true;
 				}
 				return false;
@@ -76,7 +79,8 @@ public class GameScene extends BaseScene {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if (this.isVisible() && pSceneTouchEvent.isActionUp()) {
-					EventBus.getDefault().post(new Event.StartScene(SceneType.GAME, SceneType.SUB_MENU, null));
+					SceneParams sceneParams = new SceneParams(params.chapter, params.maxLevel, params.unlockedLevel);
+					EventBus.getDefault().post(new Event.StartScene(SceneType.GAME, SceneType.SUB_MENU, sceneParams));
 					return true;
 				}
 				return false;
@@ -118,12 +122,12 @@ public class GameScene extends BaseScene {
 		navigationBackSprites.add(navigationBackNormal);
 		navigationBackSprites.add(navigationBackHard);
 	}
-	
+
 	@Override
-	public void setParams(final Object params) {
-		GameParams gameParams = (GameParams) params;
-		NavigationBackSprite navigationBackSprite = getNavigationBackSprite(gameParams.chapter);
-		navigationBackSprite.setText(gameParams.level + "/" + gameParams.maxLevel);
+	public void onSceneChanged(SceneParams params) {
+		this.params = params;
+		NavigationBackSprite navigationBackSprite = getNavigationBackSprite(this.params.chapter);
+		navigationBackSprite.setText(((GameSceneParams) this.params).currentLevel + "/" + this.params.maxLevel);		
 	}
 	
 	private NavigationBackSprite getNavigationBackSprite(final Chapter chapter) {

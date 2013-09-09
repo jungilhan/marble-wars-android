@@ -16,7 +16,7 @@ import com.bulgogi.marblewars.config.Constants.Chapter;
 import com.bulgogi.marblewars.config.Constants.SceneType;
 import com.bulgogi.marblewars.event.Event;
 import com.bulgogi.marblewars.resource.MainMenuResource;
-import com.bulgogi.marblewars.scene.model.MainMenuParams;
+import com.bulgogi.marblewars.scene.model.SceneParams;
 
 import de.greenrobot.event.EventBus;
 
@@ -53,7 +53,8 @@ public class MainMenuScene extends BaseScene {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if (pSceneTouchEvent.isActionUp()) {
-					EventBus.getDefault().post(new Event.StartScene(SceneType.MAIN_MENU, SceneType.SUB_MENU, null));
+					SceneParams sceneParams = new SceneParams(params.chapter, params.maxLevel, params.unlockedLevel);
+					EventBus.getDefault().post(new Event.StartScene(SceneType.MAIN_MENU, SceneType.SUB_MENU, sceneParams));
 					return true;
 				}
 				
@@ -68,6 +69,8 @@ public class MainMenuScene extends BaseScene {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if (pSceneTouchEvent.isActionUp() && this.isVisible()) {
+					SceneParams sceneParams = new SceneParams(params.chapter, params.maxLevel, params.unlockedLevel);
+					EventBus.getDefault().post(new Event.StartScene(SceneType.MAIN_MENU, SceneType.SUB_MENU, sceneParams));
 					return true;
 				}
 				
@@ -82,6 +85,8 @@ public class MainMenuScene extends BaseScene {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if (pSceneTouchEvent.isActionUp() && this.isVisible()) {
+					SceneParams sceneParams = new SceneParams(params.chapter, params.maxLevel, params.unlockedLevel);
+					EventBus.getDefault().post(new Event.StartScene(SceneType.MAIN_MENU, SceneType.SUB_MENU, sceneParams));
 					return true;
 				}
 				
@@ -127,14 +132,14 @@ public class MainMenuScene extends BaseScene {
 		hardSprites.add(hardUnlock);
 		hardSprites.add(hardLock);
 	}
-	
+
 	@Override
-	public void setParams(final Object params) {
-		MainMenuParams mainMenuParams = (MainMenuParams) params;
-		setVisibilityChild(mainMenuParams.chapter);
+	public void onSceneChanged(final SceneParams params) {
+		this.params = params;
+		changeSpritesVisibility(this.params.chapter);
 	}
 	
-	private void setVisibilityChild(final Chapter chapter) {
+	private void changeSpritesVisibility(final Chapter chapter) {
 		for (Sprite normalSprite : normalSprites) {
 			normalSprite.setVisible(false);
 		}
